@@ -71,5 +71,5 @@ app.get("/", (req, res) =>{
 })
 
 app.listen(PORT, () => {
-    console.log("server stared on : /api:" + process.env.SERVER_PORT)
+    console.log("server stared on : 5000/api/v0/graphql")
 })
