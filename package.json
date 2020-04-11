@@ -1,0 +1,39 @@
+{
+  "name": "dj-truck-server",
+  "version": "2.0.0",
+  "description": "dj-truck-graphql-server",
+  "engines": {
+    "node": "12.16.1"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "build": "webpack --mode production"
+  },
+  "author": "robert.kami88@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^2.11.0",
+    "body-parser": "^1.19.0",
+    "cli": "^1.0.1",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-cors": "0.0.3",
+    "express-jwt": "^5.3.1",
+    "graphql": "^14.6.0",
+    "graphql-type-json": "^0.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^1.7.0",
+    "merge-graphql-schemas": "^1.7.7",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.2",
+    "pg": "^8.0.0",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.21.5",
+    "sequelizer": "^1.1.4",
+    "web-pack": "^1.0.0",
+    "webpack-cli": "^3.3.11"
+  }
+}
