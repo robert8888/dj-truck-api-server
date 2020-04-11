@@ -11,7 +11,7 @@ const { ApolloServer } = require("apollo-server-express");
 const { template: homeTemplate } = require("./homeTemplate");
 
 
-const PORT = process.env.SERVER_PORT
+const PORT = process.env.PORT || process.env.SERVER_PORT
 
 const app = express();
 
@@ -71,5 +71,5 @@ app.get("/", (req, res) =>{
 })
 
 app.listen(PORT, () => {
-    console.log("server stared on : 5000/api/v0/graphql")
+    console.log("server stared on : "+PORT+"/api/v0/graphql")
 })
