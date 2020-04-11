@@ -2,6 +2,9 @@
   "name": "dj-truck-server",
   "version": "1.0.0",
   "description": "dj-truck-graphql-server",
+  "engines": {
+    "node": "12.16.1"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
