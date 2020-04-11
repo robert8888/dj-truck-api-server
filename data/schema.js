@@ -1,22 +1,13 @@
 const { gql } = require('apollo-server-express');
+const { mergeTypes } = require('merge-graphql-schemas');
 
-const typeDefs = gql`
-    type User {
-        id: Int!
-        username: String!
-        email: String!
+const types = [
+    require("./user/schema"),
+    require("./user_assets/schema")
+]
 
-    }
+let typeDefs = mergeTypes(types);
 
-    type Query {
-        me : User
-    }
-
-    type Mutation {
-        signin(username: String! , email: String!, password: String!) : User
-        login(email: String!, password: String!) : User
-        invalidateTokens: Boolean
-    }
-`
+typeDefs = gql`${typeDefs}`;
 
 module.exports = typeDefs;

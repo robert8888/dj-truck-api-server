@@ -1,65 +1,74 @@
 require('dotenv').config();
 
 const express = require("express");
+const cors = require("express-cors");
 const cookieParser = require("cookie-parser");
 const typeDefs = require("./data/schema");
 const resolvers = require("./data/resolvers");
+const jwt = require("express-jwt");
+const jwksRsa = require('jwks-rsa')
 const { ApolloServer } = require("apollo-server-express");
-const { verify } = require("jsonwebtoken");
-const { User } = require("./models");
-const { createAndAssignTokens } = require("./auth");
+const { template: homeTemplate } = require("./homeTemplate");
+
 
 const PORT = process.env.SERVER_PORT
 
 const app = express();
 
+app.use(cors());
+
 app.use(cookieParser());
 
-app.use((req, res, next) => {
-    const refreshToken = req.cookies["refresh-token"];
-    const accessToken = req.cookies["access-token"];
+const jwtCheck = jwt({
+    secret: jwksRsa.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        jwksUri: process.env.AUTH0_ISSUER + '.well-known/jwks.json'
+  }),
+  audience:  process.env.AUTH0_AUDIENCE,
+  issuer: process.env.AUTH0_ISSUER,
+  algorithms: ['RS256']
+});
 
-    if (!refreshToken && !accessToken) {
-        return next();
+app.use((req, res, next)=>{
+    handleErrr = err =>{
+        if(err){
+            if(err.name === "UnauthorizedError")
+            {
+                console.log("unauthorized connection try");
+                return next();
+            }
+            
+        } 
+        next();
     }
+    jwtCheck(req, res, handleErrr)
+});
 
-    try {
-        const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
-        req.userId = data.id;
-        return next();
-    } catch { }
-
-    if (!refreshToken) {
-        return next();
-    }
-
-    let data;
-    try {
-        data = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-    } catch {}
-
-    if(!data) { return next() }
-
-    const { id, count } = data;
-    let user = User.findOne({ where: { id } })
-
-    if (!user || user.count !== count) {
-        return next();
-    }
-
-    createAndAssignTokens(user, res)
-    req.userId = user.id;
-
-    next();
-})
+// app.use((req, res, next)=>{
+//     req.user = {
+//         sub : "facebook|4195047167187480"
+//     }
+//     next();
+// })
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req, res }) => ({ req, res })
+    context: ({ req, res }) => {
+        if(!req.user){
+            throw new AuthenticationError('to reach data in this api you have to be logged'); 
+        }
+        return { user: req.user, req, res}
+    }
 });
 
-server.applyMiddleware({ app, path: "/api/graphql" });
+server.applyMiddleware({ app, path: "/api/v0/graphql" });
+
+app.get("/", (req, res) =>{
+    res.send(homeTemplate)
+})
 
 app.listen(PORT, () => {
     console.log("server stared on : /api:" + process.env.SERVER_PORT)

@@ -2,6 +2,21 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 
+const createToken = (user) => {
+    const mainToken = jwt.sign({
+        id: user.id,
+        email: user.email,
+    },
+        process.env.MAIN_TOKEN_SECRET,
+        { expiresIn: '1y' }
+    )
+
+    return {
+        mainToken,
+        mainTokenExpires:  new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+    }
+}
+
 const createTokens = (user) => {
 
     const accessToken = jwt.sign({
@@ -30,6 +45,8 @@ const createTokens = (user) => {
 
 }
 
+
+
 const createAndAssignTokens = (user, res) => {
     const {
         refreshToken, 
@@ -44,5 +61,6 @@ const createAndAssignTokens = (user, res) => {
     return res;
 }
 
+module.exports.createToken = createToken;
 module.exports.createTokens = createTokens;
 module.exports.createAndAssignTokens = createAndAssignTokens;
