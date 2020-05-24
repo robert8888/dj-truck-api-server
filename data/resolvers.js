@@ -1,10 +1,11 @@
 const userResolvers = require("./user/resolvers");
-const userAssetsResolvers =  require("./user_assets/resolvers");
-
+const userAssetsPlaylistResolvers =  require("./user_assets/playlist/resolvers");
+const userAssetsRecordsResolvers = require("./user_assets/records/resolvers");
 
 let resolvers = [
     userResolvers,
-    userAssetsResolvers
+    userAssetsPlaylistResolvers,
+    userAssetsRecordsResolvers
 ]
 
 let resolversObject = {

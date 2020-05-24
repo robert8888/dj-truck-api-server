@@ -9,12 +9,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
-
   },
   "author": "robert.kami88@gmail.com",
   "license": "ISC",
   "dependencies": {
     "apollo-server-express": "^2.11.0",
+    "base64-stream": "^1.0.0",
     "body-parser": "^1.19.0",
     "cli": "^1.0.1",
     "cookie-parser": "^1.4.5",

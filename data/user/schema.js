@@ -7,14 +7,34 @@ const typeDefs = `
         familyName: String
         givenName: String
         picture: String
+        createdAt: String
+    }
+
+    type GenereMeta {
+        occurrence: Int!
+        genere: Genere!
+    }
+
+    type UserProfile{
+        user: User,
+        description: String
+        records: Int!
+        recordsTime: Float!
+        generes: [GenereMeta]
     }
 
     type Query {
         me : User
+        profile(nickname: String!) : UserProfile
     }
 
+
     type Mutation {
-        updateMe ( input : updateMeInput!): User
+        updateMe(input: updateMeInput): User
+        
+        updateMyNick(nickname: String):  Status!
+        updateMyPicture(file: Upload!) : Status!
+        udpateMyDescription(description: String): Status!
     }
 
     input updateMeInput {
