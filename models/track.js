@@ -41,6 +41,13 @@ module.exports = (sequelize, DataTypes) => {
     Track.belongsTo(models.Playlist, {
       foreignKey: "playlist",
     })
+
+    // Track.belongsToMany(models.Record, {
+    //   foreignKey: 'trackId',
+    //   otherKey: 'recordId',
+    //   through: {model: models.RecordTracks}
+    // })
+
   };
   return Track;
 };

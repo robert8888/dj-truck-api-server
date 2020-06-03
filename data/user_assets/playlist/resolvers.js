@@ -1,6 +1,6 @@
 require("dotenv").config();
 const GraphQLJSON = require('graphql-type-json');
-const { User, Dir, Playlist, Track , RecordTracks,  sequelize} = require("./../../../models");
+const { User, Dir, Playlist, Track , Record,  RecordTracks, Sequelize, sequelize} = require("./../../../models");
 
 
 const resolvers = {
@@ -98,6 +98,28 @@ const resolvers = {
         },
 
         async deletePlaylist(_, { ids }) {
+            const eq = Sequelize.Op.eq
+            const tracks = await Track.findAll(
+                {
+                     where : {
+                         playlist : ids, 
+
+                         },
+                     include: {
+                         model: Record,
+                         through: {
+                            where : {
+                                "recordId": {[eq] : null},
+                            }
+                         }
+                     }
+            });
+
+            const trackIds = tracks.map( track => track.id );
+            await Track.update(
+                {playlist: null},
+                {where : { id: trackIds }},
+            )
             return await Playlist.destroy({ where: { id: ids } });
         },
 
