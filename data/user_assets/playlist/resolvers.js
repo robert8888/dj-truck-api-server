@@ -126,7 +126,7 @@ const resolvers = {
         async createTrack(_, { input }, { user }) {
             const { id: userId } = await User.findOne({ where: { "authId": user.sub } })
             input.userId = userId;
-            const track = await Track.create({input});
+            const track = await Track.create({...input});
             return track;
         },
 
