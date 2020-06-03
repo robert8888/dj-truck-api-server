@@ -40,7 +40,6 @@ module.exports = (sequelize, DataTypes) => {
     }),
     Track.belongsTo(models.Playlist, {
       foreignKey: "playlist",
-      onDelete: 'CASCADE',
     })
   };
   return Track;

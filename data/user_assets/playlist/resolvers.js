@@ -1,6 +1,6 @@
 require("dotenv").config();
 const GraphQLJSON = require('graphql-type-json');
-const { User, Dir, Playlist, Track , sequelize} = require("./../../../models");
+const { User, Dir, Playlist, Track , RecordTracks,  sequelize} = require("./../../../models");
 
 
 const resolvers = {
@@ -104,7 +104,7 @@ const resolvers = {
         async createTrack(_, { input }, { user }) {
             const { id: userId } = await User.findOne({ where: { "authId": user.sub } })
             input.userId = userId;
-            const track = await Track.create(input);
+            const track = await Track.findOrCreate({defaults:{input}, where: { ...input, userId: id}});
             return track;
         },
 
@@ -139,8 +139,22 @@ const resolvers = {
         },
 
         async deleteTrack(_, { id }) {
-            const result = await Track.destroy({ where: { id } })
-            return (result === 1);
+            let success = false;
+            try{
+                const connections = await RecordTracks.findAndCountAll({ where : {id}});
+                if(connections.count > 0){
+                    const result = await Track.update({playlist : null}, {where: {id}})
+                    success = (result[0] === 1);
+                } else {
+                    const result = await Track.destroy({ where: { id } })
+                    success = (result === 1) 
+                }
+            } catch (error){
+                console.log(error.message);
+            } finally {
+                return success;
+            }
+
         }
     }
 }

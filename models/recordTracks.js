@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
                 key: "id"
             }
         },
+
         trackId: {
             type: DataTypes.INTEGER,
             references: {
@@ -21,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
                 key: "id"
             }
         },
+        
         start : {
             type: DataTypes.FLOAT,
         },
