@@ -27,10 +27,10 @@ module.exports = (sequelize, DataTypes) => {
     Record.associate = function (models) {
         // associations can be defined here
 
-        Record.belongsToMany(models.Genere, {
+        Record.belongsToMany(models.Genre, {
             foreignKey: 'recId',
-            as: 'generes',
-            through: { model: models.RecordGeneres }
+            as: 'genres',
+            through: { model: models.RecordGenres }
         })
 
         Record.belongsToMany(models.Track, {

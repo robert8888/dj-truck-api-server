@@ -4,9 +4,9 @@ const {
     Sequelize, 
     Record,
     Track, 
-    Genere, 
+    Genre, 
     User, 
-    RecordGeneres,
+    RecordGenres,
     RecordTracks, 
     FavoriteRecord,
     Comment} = require("./../../../models");
@@ -29,7 +29,7 @@ const resolvers = {
                 nickname= null,
                 query = null,
                 queryOpt = null,
-                genereNames = null,
+                genreNames = null,
                 pagin = null,
                 title = null,
             } = input;
@@ -84,9 +84,9 @@ const resolvers = {
             }
 
             const whereGeners = {};
-            if(genereNames){
+            if(genreNames){
                 whereGeners.where = {
-                    name : genereNames
+                    name : genreNames
                 }
             }
 
@@ -101,8 +101,8 @@ const resolvers = {
                 }});
 
             include.push({
-                model: Genere,
-                as: "generes",
+                model: Genre,
+                as: "genres",
                 ...whereGeners
             })
 
@@ -210,23 +210,23 @@ const resolvers = {
 
         async updateRecord(_, { id, input }, {user}) {
             if (!user) throw new Error("not authenticated");
-            if (input.generes) {
-                let generesIds = [];
-                for (let genere of input.generes) {
-                    let gen = await Genere.findOrCreate({
-                        where: { name: genere },
-                        defaults: { name: genere }
+            if (input.genres) {
+                let genresIds = [];
+                for (let genre of input.genres) {
+                    let gen = await Genre.findOrCreate({
+                        where: { name: genre },
+                        defaults: { name: genre }
                     })
-                    generesIds.push(gen[0].id)
+                    genresIds.push(gen[0].id)
                 }
-                input.generes = generesIds;
-                await RecordGeneres.destroy({
+                input.genres = genresIds;
+                await RecordGenres.destroy({
                     where: {
                      recId: id,
-                     genId: {[Sequelize.Op.notIn]: generesIds},   
+                     genId: {[Sequelize.Op.notIn]: genresIds},   
                     }})
-                for(let genId of generesIds){
-                    await RecordGeneres.findOrCreate({
+                for(let genId of genresIds){
+                    await RecordGenres.findOrCreate({
                         where: {recId: id, genId},
                         defaults: {recId: id, genId}
                     })
@@ -255,9 +255,9 @@ const resolvers = {
             return (result === 1)
         },
 
-        async addGenere(_, { name }) {
+        async addGenre(_, { name }) {
             if (!user) throw new Error("not authenticated");
-            const id = Genere.create({ name });
+            const id = Genre.create({ name });
             return id;
         },
 

@@ -2,7 +2,7 @@
 
 
 module.exports = (sequelize, DataTypes) => {
-  const Genere = sequelize.define('Genere', {
+  const Genre = sequelize.define('Genre', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -12,14 +12,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
   }, {});
-  Genere.associate = function(models) {
+  Genre.associate = function(models) {
     // associations can be defined here
 
-    Genere.belongsToMany(models.Record, { 
+    Genre.belongsToMany(models.Record, { 
       foreignKey: 'genId',
-      through: {model: models.RecordGeneres}
+      through: {model: models.RecordGenres}
     });
 
   };
-  return Genere;
+  return Genre;
 };

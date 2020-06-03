@@ -6,8 +6,8 @@ const {
     User,
     UserMeta,
     Record,
-    Genere,
-    RecordGeneres,
+    Genre,
+    RecordGenres,
     Sequelize } = require("./../../models");
 const { Status } = require("./../../models/status");
 
@@ -66,14 +66,14 @@ const resolvers = {
 
             const recordIds = records.rows.map(record => record.id);
 
-            const generes = await Genere.findAll({
+            const genres = await Genre.findAll({
                 include: [
                     {
                         model: Record,
                         right: true,
                         attributes: ['id'],
                         through: {
-                            model: RecordGeneres,
+                            model: RecordGenres,
                             where: {
                                 recId: recordIds
                             }
@@ -83,9 +83,9 @@ const resolvers = {
                 ],
             })
 
-            result.generes = generes.map(genere => ({
-                genere,
-                occurrence: genere.dataValues.Records.length,
+            result.genres = genres.map(genre => ({
+                genre,
+                occurrence: genre.dataValues.Records.length,
             }));
 
             return result;

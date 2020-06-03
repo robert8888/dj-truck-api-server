@@ -2,7 +2,7 @@
 
 const typeDefs = `
 scalar JSON
-type Genere {
+type Genre {
     id: Int!
     name: String!
 }
@@ -17,7 +17,7 @@ type Record {
     id: Int!
     user: User!
     title: String!
-    generes: [Genere]
+    genres: [Genre]
     
     comments: [Comment]
     tracks: [tracklistItem]
@@ -55,8 +55,8 @@ type Query {
     records(input: getRecordsInput): Records!
     record(id: Int!) : Record
 
-    generes: [Genere]
-    generesLike(query: String!): [Genere]
+    genres: [Genre]
+    genresLike(query: String!): [Genre]
 }
 
 type Mutation {
@@ -64,7 +64,7 @@ type Mutation {
     updateRecord(id: Int! input: updateRecord): Boolean!
     deleteRecord(id: Int!) : Boolean!
 
-    addGenere(name : String): Int!
+    addGenre(name : String): Int!
 
     createComment(input: createComment): Comment!
     updateComment(input: updateComment): Boolean!
@@ -78,7 +78,7 @@ input updateRecord {
     title: String
     duration: Float
     description : String
-    generes: [String]
+    genres: [String]
     peaks: [Float]
     fileSize: String
     tracks: [recordTracks]
@@ -94,7 +94,7 @@ input getRecordsInput {
     userId: Int
     nickname: String
     id: Int
-    genereNames: [String]
+    genreNames: [String]
     title: String
     query: String
     queryOpt: [String]

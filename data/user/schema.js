@@ -10,9 +10,9 @@ const typeDefs = `
         createdAt: String
     }
 
-    type GenereMeta {
+    type GenreMeta {
         occurrence: Int!
-        genere: Genere!
+        genre: Genre!
     }
 
     type UserProfile{
@@ -20,7 +20,7 @@ const typeDefs = `
         description: String
         records: Int!
         recordsTime: Float!
-        generes: [GenereMeta]
+        genres: [GenreMeta]
     }
 
     type Query {

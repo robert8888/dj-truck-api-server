@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const Record = sequelize.define('RecordGeneres', {
+    const Record = sequelize.define('RecordGenres', {
 
         recId: {
             type: DataTypes.INTEGER,
@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         genId: {
             type: DataTypes.INTEGER,
             references: {
-                model: 'Genere',
+                model: 'Genre',
                 key: "id"
             }
         },
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     Record.associate = function (models) {
         // associations can be defined here
 
-        Record.belongsTo(models.Genere, {
+        Record.belongsTo(models.Genre, {
             foreignKey: 'genId',
             onDelete: 'CASCADE'
         })

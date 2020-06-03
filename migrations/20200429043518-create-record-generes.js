@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('RecordGeneres', {
+    return queryInterface.createTable('RecordGenres', {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -25,7 +25,7 @@ module.exports = {
         allowNull: false,
         onDelete: 'CASCADE',
         references: {
-          model: 'Generes',
+          model: 'Genres',
           key: 'id'
         }
       },
@@ -43,6 +43,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('RecordGeneres');
+    return queryInterface.dropTable('RecordGenres');
   }
 };
