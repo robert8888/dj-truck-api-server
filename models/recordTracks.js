@@ -43,7 +43,8 @@ module.exports = (sequelize, DataTypes) => {
 
         RecordTrack.belongsTo(models.Record, {
             foreignKey: 'recordId',
-            as : 'record'
+            as : 'record',
+            onDelete: 'CASCADE',
         })
 
     };

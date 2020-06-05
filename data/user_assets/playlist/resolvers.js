@@ -97,6 +97,8 @@ const resolvers = {
             return (res[0] === 1);
         },
 
+        //to do improve - rapaire - and test 
+        // should be right join 
         async deletePlaylist(_, { ids }) {
             const eq = Sequelize.Op.eq
             const tracks = await Track.findAll(
