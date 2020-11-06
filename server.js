@@ -54,7 +54,7 @@ const server = new ApolloServer({
         // if(!req.user){
         //     throw new AuthenticationError('to reach data in this api you have to be logged'); 
         // }
-      //  console.log(req.user)
+        // console.log(req.user);
         return { user: req.user, req, res}
     }
 });

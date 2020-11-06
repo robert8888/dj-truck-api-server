@@ -13,6 +13,7 @@ type tracklistItem{
     track: Track
 }
 
+
 type Record {
     id: Int!
     user: User!
@@ -55,7 +56,7 @@ type Query {
     records(input: getRecordsInput): Records!
     record(id: Int!) : Record
 
-    genres: [Genre]
+    genres(limit: Int): [Genre]
     genresLike(query: String!): [Genre]
 }
 

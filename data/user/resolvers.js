@@ -27,13 +27,16 @@ const userMap = user => {
 const resolvers = {
     Query: {
         async me(obj, args, { user }, opt) {
-            if (!user) {
-                throw new Error("not authenticated")
+            try{
+                if (!user) {
+                    throw new Error("not authenticated")
+                }
+                let _user = await User.findOne({ where: { authId: user.sub } });
+
+                return userMap(_user);
+            } catch (error){
+                console.log(error);
             }
-
-            let _user = await User.findOne({ where: { "authId": user.sub } });
-
-            return userMap(_user);
         },
 
         async profile(_, { nickname }, opt) {

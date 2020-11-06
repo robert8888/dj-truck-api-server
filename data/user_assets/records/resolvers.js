@@ -188,6 +188,11 @@ const resolvers = {
                 track
             }))
             return result;
+        },
+
+        async genres(_, {limit}){
+            const opt = limit ? {limit} : {};
+            return await Genre.findAll(opt);
         }
     },
 
