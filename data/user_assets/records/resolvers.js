@@ -98,12 +98,13 @@ const resolvers = {
                 as: 'user',
                 where: {
                     id: { [Sequelize.Op.col]: 'Record.userId' },
-                }});
+                },
+            });
 
             include.push({
                 model: Genre,
                 as: "genres",
-                ...whereGeners
+                ...whereGeners,
             })
 
             if(currentUserId){
@@ -115,29 +116,32 @@ const resolvers = {
                             userId : currentUserId,
                         },
                         attributes: []
-                    }
+                    },
                 })
             }
 
-            let result = await Record.findAndCountAll({
+            let result = await Record.findAll({
                 offset,
                 limit,
                 where,
                 include: [...include],
                 order: [['createdAt', 'DESC']],
-           
+            })
+
+            const count = await Record.count({
+                where,
             })
 
             if(currentUserId){
-                result.rows = result.rows.map(record => {
+                result.rows = result.map(record => {
                     record.favorited = (record.favorited && record.favorited.length > 0)
                     return record;
                 })
             }
 
             return {
-                records: result.rows,
-                countAll: result.count
+                records: result,
+                countAll: count
             };
         },
 
@@ -191,8 +195,21 @@ const resolvers = {
         },
 
         async genres(_, {limit}){
-            const opt = limit ? {limit} : {};
-            return await Genre.findAll(opt);
+            const genres = await RecordGenres.findAll({
+                attributes: [
+                    [Sequelize.literal('COUNT(*)'), "count"]
+                ],
+                group: ["Genre.id"],
+                order: [[Sequelize.literal('count'), 'DESC']],
+                limit,
+                include :{
+                    attributes: ["name", "id"],
+                    model: Genre,
+                    required: true,
+                }
+            })
+            
+            return genres.map(row => row.Genre);
         }
     },
 
@@ -238,15 +255,18 @@ const resolvers = {
                 }
 
             }
-            const tracks = input.tracks.map(track => ({
-                                trackId: track.id, 
-                                recordId: id,
-                                start: track.start,
-                                end : track.end
-                            }))
 
-            if(tracks.length){
-                await RecordTracks.bulkCreate(tracks)
+            if(input.tracks){
+                const tracks = input.tracks.map(track => ({
+                    trackId: track.id,
+                    recordId: id,
+                    start: track.start,
+                    end : track.end
+                }))
+
+                if(tracks.length){
+                    await RecordTracks.bulkCreate(tracks)
+                }
             }
 
             const result = await Record.update({ ...input }, { where: { id } })
