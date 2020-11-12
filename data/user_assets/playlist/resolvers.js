@@ -122,6 +122,7 @@ const resolvers = {
                 {playlist: null},
                 {where : { id: trackIds }},
             )
+
             return await Playlist.destroy({ where: { id: ids } });
         },
 

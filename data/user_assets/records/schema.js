@@ -52,6 +52,12 @@ type Comment {
     createdAt: String
 }
 
+enum RecordsOrder{
+    title,
+    user,
+    data,
+}
+
 type Query {
     records(input: getRecordsInput): Records!
     record(id: Int!) : Record
@@ -75,6 +81,7 @@ type Mutation {
     removeFavorite(recordId: Int!): Boolean!
 }
 
+
 input updateRecord {
     title: String
     duration: Float
@@ -82,13 +89,18 @@ input updateRecord {
     genres: [String]
     peaks: [Float]
     fileSize: String
-    tracks: [recordTracks]
+    tracks: [recordTracksInput]
 }
 
-input recordTracks {
-    id: Int!
-    start: Float!
-    end: Float!
+input recordTracksInput {
+    start: Float
+    end: Float
+    id: Int
+}
+
+input recordsOrderInput {
+    column: String
+    type: String
 }
 
 input getRecordsInput {
@@ -100,6 +112,7 @@ input getRecordsInput {
     query: String
     queryOpt: [String]
     pagin : paginationInput
+    orderBy: recordsOrderInput
 }
 
 input createComment {

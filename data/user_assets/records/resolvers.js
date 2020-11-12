@@ -32,7 +32,10 @@ const resolvers = {
                 genreNames = null,
                 pagin = null,
                 title = null,
+                orderBy = null,
             } = input;
+
+            let order =  orderBy ? [['createdAt', 'DESC']] : [[orderBy.column, orderBy.type]];
 
             if(nickname){
                 let user = await User.findOne({where: {nickname}})
@@ -125,11 +128,12 @@ const resolvers = {
                 limit,
                 where,
                 include: [...include],
-                order: [['createdAt', 'DESC']],
+                order,
             })
 
             const count = await Record.count({
                 where,
+                ...(Object.keys(where === 0) ? {include: [...include]}: {})
             })
 
             if(currentUserId){
@@ -138,6 +142,8 @@ const resolvers = {
                     return record;
                 })
             }
+
+            console.log(result)
 
             return {
                 records: result,
@@ -205,7 +211,6 @@ const resolvers = {
                 include :{
                     attributes: ["name", "id"],
                     model: Genre,
-                    required: true,
                 }
             })
             
