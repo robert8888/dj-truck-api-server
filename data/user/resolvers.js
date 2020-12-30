@@ -37,9 +37,11 @@ const resolvers = {
             } catch (error){
                 console.log(error);
             }
+
         },
 
         async profile(_, { nickname }, opt) {
+            console.log("call profile")
             let result = {};
             result.user = await User.findOne({
                 where: { nickname },
@@ -57,7 +59,7 @@ const resolvers = {
             const records = await Record.findAndCountAll({
                 where: { userId: result.user.id }
             })
-            result.records = records.count;
+            result.records = records.count || 0;
 
             const recordsDuration = await Record.findAll({
                 where: { userId: result.user.id },
@@ -65,7 +67,7 @@ const resolvers = {
                     [Sequelize.fn('sum', Sequelize.col('duration')), 'total_duration']
                 ]
             })
-            result.recordsTime = recordsDuration[0].dataValues.total_duration;
+            result.recordsTime = recordsDuration[0].dataValues.total_duration || 0;
 
             const recordIds = records.rows.map(record => record.id);
 
@@ -91,6 +93,7 @@ const resolvers = {
                 occurrence: genre.dataValues.Records.length,
             }));
 
+            console.log(result)
             return result;
         }
 
@@ -115,7 +118,6 @@ const resolvers = {
         },
 
         async updateMyPicture(obj, { file }, { user }) {
-          //  return new Status(false, "dupa");
             try {
 
                 if (!user) {

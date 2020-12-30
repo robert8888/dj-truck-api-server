@@ -32,7 +32,7 @@ const jwtCheck = jwt({
 });
 
 app.use((req, res, next)=>{
-    handleErrr = err =>{
+    const handleError = err =>{
         // if(err){
         //     if(err.name === "UnauthorizedError")
         //     {
@@ -43,7 +43,7 @@ app.use((req, res, next)=>{
         // } 
         next();
     }
-    jwtCheck(req, res, handleErrr)
+    jwtCheck(req, res, handleError)
 });
 
 
