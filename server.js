@@ -25,36 +25,42 @@ const jwtCheck = jwt({
         rateLimit: true,
         jwksRequestsPerMinute: 5,
         jwksUri: process.env.AUTH0_ISSUER + '.well-known/jwks.json'
-  }),
-  audience:  process.env.AUTH0_AUDIENCE,
-  issuer: process.env.AUTH0_ISSUER,
-  algorithms: ['RS256']
+    }),
+    audience:  process.env.AUTH0_AUDIENCE,
+    issuer: process.env.AUTH0_ISSUER,
+    algorithms: ['RS256']
 });
 
 app.use((req, res, next)=>{
-    const handleError = err =>{
+    handleErrr = err =>{
         // if(err){
         //     if(err.name === "UnauthorizedError")
         //     {
         //         console.log("unauthorized connection try");
         //         return next();
         //     }
-            
-        // } 
+        //
+        // }
         next();
     }
-    jwtCheck(req, res, handleError)
+    jwtCheck(req, res, handleErrr)
 });
 
+// app.use((req, res, next)=>{
+//     req.user = {
+//         sub : "facebook|4195047167187480"
+//     }
+//     next();
+// })
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
     context: ({ req, res }) => {
         // if(!req.user){
-        //     throw new AuthenticationError('to reach data in this api you have to be logged'); 
+        //     throw new AuthenticationError('to reach data in this api you have to be logged');
         // }
-        // console.log(req.user);
+        //
         return { user: req.user, req, res}
     }
 });
@@ -68,5 +74,3 @@ app.get("/", (req, res) =>{
 app.listen(PORT, () => {
     console.log("server stared on : "+PORT+"/api/v0/graphql")
 })
-
-
