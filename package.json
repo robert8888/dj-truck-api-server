@@ -2,9 +2,6 @@
   "name": "dj-truck-server",
   "version": "2.0.0",
   "description": "dj-truck-graphql-server",
-  "engines": {
-    "node": "12.16.0"
-  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -13,9 +10,13 @@
   },
   "author": "robert.kami88@gmail.com",
   "license": "ISC",
+  "engines": {
+    "node": "12.16.0",
+    "npm": "6.13.4"
+  },
   "dependencies": {
-    "axios": "^0.21.1",
     "apollo-server-express": "^2.19.0",
+    "axios": "^0.21.1",
     "base64-stream": "^1.0.0",
     "body-parser": "^1.19.0",
     "cli": "^1.0.1",
