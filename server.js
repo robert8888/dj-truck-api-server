@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const express = require("express");
-const cors = require("express-cors");
+const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const typeDefs = require("./data/schema");
 const resolvers = require("./data/resolvers");
@@ -15,7 +15,10 @@ const PORT = process.env.PORT || process.env.SERVER_PORT
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: true,
+    credentials: true
+}));
 
 app.use(cookieParser());
 
@@ -32,6 +35,10 @@ const jwtCheck = jwt({
 });
 
 app.use((req, res, next)=>{
+    if (req.method === 'OPTIONS') {
+        // Preflight request – puszczamy bez JWT
+        return next();
+    }
     handleErrr = err =>{
         // if(err){
         //     if(err.name === "UnauthorizedError")

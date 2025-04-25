@@ -101,6 +101,38 @@ const resolvers = {
 
 
     Mutation: {
+        async createUser(_, { input }, { user }) {
+            try {
+                if (!user) {
+                    throw new Error("not authenticated");
+                }
+
+                const {
+                    username,
+                    email,
+                    nickname,
+                    givenName,
+                    familyName,
+                    picture
+                } = input;
+
+                const newUser = await User.create({
+                    authId: user.sub,
+                    username,
+                    email,
+                    nickname,
+                    givenName,
+                    familyName,
+                    picture
+                });
+
+                return new Status(true, "User created", { user: newUser });
+            } catch (error) {
+                console.error(error);
+                return new Status(false, "Failed to create user", error.message);
+            }
+        },
+
         async updateMe(obj, args, { user }) {
             if (!user) {
                 throw new Error("not authenticated");
